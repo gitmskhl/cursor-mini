@@ -1,10 +1,12 @@
 from pathlib import Path
 
 from tools.text_utils import is_path_ignored, load_pathignore_patterns
+from workspace import WORKSPACE, save_path
 
 
 def list_files(directory: str = ".") -> list[str]:
-    path = Path(directory)
+    workspace_root = Path(WORKSPACE)
+    path = workspace_root / save_path(directory)
 
     if not path.exists():
         return [f"Directory does not exist: {directory}"]
@@ -13,9 +15,9 @@ def list_files(directory: str = ".") -> list[str]:
         return [f"Path is not a directory: {directory}"]
 
     items = []
-    ignored_patterns = load_pathignore_patterns()
+    ignored_patterns = load_pathignore_patterns(workspace_root)
     for item in sorted(path.iterdir(), key=lambda entry: entry.name.lower()):
-        if is_path_ignored(item, ignored_patterns):
+        if is_path_ignored(item, ignored_patterns, base_dir=workspace_root):
             continue
 
         suffix = "/" if item.is_dir() else ""

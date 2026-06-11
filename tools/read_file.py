@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from tools.text_utils import is_binary_file
+from workspace import WORKSPACE, save_path
 
 
 MAX_FILE_SIZE = 100_000
@@ -13,7 +14,7 @@ def read_file(
     end_line: int | None = None,
 ) -> str:
     try:
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
 
         if not file_path.exists():
             return f"File does not exist: {path}"

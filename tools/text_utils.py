@@ -72,15 +72,19 @@ def is_path_ignored(path: Path, patterns: list[str], base_dir: Path | None = Non
     return False
 
 
-def iter_unignored_paths(directory: Path, patterns: list[str]) -> Iterator[Path]:
+def iter_unignored_paths(
+    directory: Path,
+    patterns: list[str],
+    base_dir: Path | None = None,
+) -> Iterator[Path]:
     for item in sorted(directory.iterdir(), key=lambda entry: str(entry).lower()):
-        if is_path_ignored(item, patterns):
+        if is_path_ignored(item, patterns, base_dir=base_dir):
             continue
 
         yield item
 
         if item.is_dir():
-            yield from iter_unignored_paths(item, patterns)
+            yield from iter_unignored_paths(item, patterns, base_dir=base_dir)
 
 
 def is_binary_file(path: Path, encoding: str = "utf-8") -> bool:

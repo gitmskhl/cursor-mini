@@ -1,9 +1,11 @@
 from pathlib import Path
 
+from workspace import WORKSPACE, save_path
+
 
 def append_file(path: str, content: str) -> str:
     try:
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
         file_path.parent.mkdir(parents=True, exist_ok=True)
 
         with file_path.open("a", encoding="utf-8") as file:

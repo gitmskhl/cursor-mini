@@ -1,9 +1,11 @@
 from pathlib import Path
 
+from workspace import WORKSPACE, save_path
+
 
 def get_file_info(path: str) -> dict:
     try:
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
 
         if not file_path.exists():
             return {"error": f"Path does not exist: {path}"}

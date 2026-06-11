@@ -1,10 +1,12 @@
 from pathlib import Path
 import subprocess
 
+from workspace import WORKSPACE, save_path
+
 
 def execute_bash(path: str, timeout: int = 5) -> dict:
     try:
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
 
         if not file_path.exists():
             return {

@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from workspace import WORKSPACE, save_path
+
 
 def replace_chunk(path: str, start_line: int, end_line: int, content: str) -> str:
     try:
@@ -9,7 +11,7 @@ def replace_chunk(path: str, start_line: int, end_line: int, content: str) -> st
         if end_line < start_line:
             return "Error replacing chunk: end_line must be greater than or equal to start_line"
 
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
 
         if not file_path.exists():
             return f"Error replacing chunk: file does not exist: {path}"

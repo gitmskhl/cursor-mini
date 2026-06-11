@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+load_dotenv()
 from email import message
 
 from llm import send_to_llm

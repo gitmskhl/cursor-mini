@@ -1,12 +1,14 @@
 from pathlib import Path
 
+from workspace import WORKSPACE, save_path
+
 
 def write_chunk(path: str, start_line: int, content: str) -> str:
     try:
         if start_line < 1:
             return "Error writing chunk: start_line must be greater than or equal to 1"
 
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
         file_path.parent.mkdir(parents=True, exist_ok=True)
 
         if file_path.exists() and not file_path.is_file():

@@ -6,10 +6,12 @@ from tools.text_utils import (
     load_pathignore_patterns,
     read_text_file,
 )
+from workspace import WORKSPACE, save_path
 
 
 def search_text(directory: str, text: str, encoding: str = "utf-8") -> list[str]:
-    path = Path(directory)
+    workspace_root = Path(WORKSPACE)
+    path = workspace_root / save_path(directory)
 
     if not path.exists():
         return [f"Directory does not exist: {directory}"]
@@ -18,9 +20,9 @@ def search_text(directory: str, text: str, encoding: str = "utf-8") -> list[str]
         return [f"Path is not a directory: {directory}"]
 
     matches: list[str] = []
-    ignored_patterns = load_pathignore_patterns()
+    ignored_patterns = load_pathignore_patterns(workspace_root)
 
-    for item in iter_unignored_paths(path, ignored_patterns):
+    for item in iter_unignored_paths(path, ignored_patterns, base_dir=workspace_root):
         if not item.is_file():
             continue
 

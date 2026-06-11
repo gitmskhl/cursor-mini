@@ -1,11 +1,8 @@
 import os
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
-from dotenv import load_dotenv
 from colorama import Fore
 
-
-load_dotenv()
 
 PROVIDER = os.environ.get("PROVIDER")
 

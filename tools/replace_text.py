@@ -1,12 +1,14 @@
 from pathlib import Path
 
+from workspace import WORKSPACE, save_path
+
 
 def replace_text(path: str, old_text: str, new_text: str, count: int = 1) -> str:
     try:
         if old_text == "":
             return "Error replacing text: old_text must not be empty"
 
-        file_path = Path(path)
+        file_path = Path(WORKSPACE, save_path(path))
 
         if not file_path.exists():
             return f"Error replacing text: file does not exist: {path}"
