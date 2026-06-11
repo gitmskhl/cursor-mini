@@ -4,7 +4,8 @@ load_dotenv()
 from email import message
 
 from llm import send_to_llm
-from tool_registry import TOOLS_SCHEMA, FUNCTIONS
+from tool_registry import TOOLS_SCHEMA, FUNCTIONS, DANGEROUS_TOOLS
+from tools.utils import truncate_output
 from colorama import Fore
 import json
 
@@ -90,18 +91,30 @@ while not error:
                 args_text = ', '.join([f"{name}={val}" for name, val in tool_args.items()])
                 print(Fore.GREEN, f"\t{tool_name}(", args_text, ")")
                 if tool_name in FUNCTIONS:
-                    try:
-                        tool_result = FUNCTIONS[tool_name](**tool_args)
-                    except Exception as e:
-                        print(Fore.RED, "Error: ", e, Fore.RESET)
-                        tool_result = str(e)
+                    if tool_name in DANGEROUS_TOOLS:
+                        ans = input(f"Allow {tool_name}({tool_args})? [Y/N]: ")
+                        if ans.lower() in ("y", "yes", ""):
+                            ok = True
+                        else:
+                            ok = False
+                    else:
+                        ok = True
+                    
+                    if ok:
+                        try:
+                            tool_result = FUNCTIONS[tool_name](**tool_args)
+                        except Exception as e:
+                            print(Fore.RED, "Error: ", e, Fore.RESET)
+                            tool_result = str(e)
+                    else:
+                        tool_result = "User denied tool execution"
                 else:
                     tool_result = f"Unknown tool: {tool_name}"
                 
                 messages.append({
                     "role": "tool",
                     "tool_call_id": tool_call.id,
-                    "content": str(tool_result)
+                    "content": truncate_output(str(tool_result))
                 })
             if step == MAX_STEPS - 1:
                 print(Fore.RED, "Agent reached maximum number of steps!", Fore.RESET)

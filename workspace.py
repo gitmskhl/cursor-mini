@@ -39,7 +39,7 @@ def _get_workspace() -> str:
 # Инициализация WORKSPACE при импорте модуля
 WORKSPACE = _get_workspace()
 
-def save_path(path: str) -> str:
+def resolve_path(path: str) -> str:
     """
     Приводит переданный путь к безопасному относительному пути внутри WORKSPACE.
     - Если путь относительный, он интерпретируется относительно WORKSPACE.

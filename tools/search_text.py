@@ -6,12 +6,12 @@ from tools.text_utils import (
     load_pathignore_patterns,
     read_text_file,
 )
-from workspace import WORKSPACE, save_path
+import workspace
 
 
 def search_text(directory: str, text: str, encoding: str = "utf-8") -> list[str]:
-    workspace_root = Path(WORKSPACE)
-    path = workspace_root / save_path(directory)
+    workspace_root = Path(workspace.WORKSPACE)
+    path = workspace_root / workspace.resolve_path(directory)
 
     if not path.exists():
         return [f"Directory does not exist: {directory}"]

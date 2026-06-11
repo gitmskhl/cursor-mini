@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from workspace import WORKSPACE, save_path
+import workspace
 
 
 def write_file(path: str, content: str) -> str:
     try:
-        file_path = Path(WORKSPACE, save_path(path))
+        file_path = Path(workspace.WORKSPACE, workspace.resolve_path(path))
         file_path.parent.mkdir(parents=True, exist_ok=True)
         file_path.write_text(content, encoding="utf-8")
         return f"Successfully wrote file: {path}"

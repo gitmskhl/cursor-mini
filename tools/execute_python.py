@@ -2,12 +2,12 @@ from pathlib import Path
 import subprocess
 import sys
 
-from workspace import WORKSPACE, save_path
+import workspace
 
 
 def execute_python(path: str, timeout: int = 5, args: list[str] | None = None) -> dict:
     try:
-        file_path = Path(WORKSPACE, save_path(path))
+        file_path = Path(workspace.WORKSPACE, workspace.resolve_path(path))
 
         if not file_path.exists():
             return {

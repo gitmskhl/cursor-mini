@@ -1,12 +1,12 @@
 from pathlib import Path
 
 from tools.text_utils import is_path_ignored, load_pathignore_patterns
-from workspace import WORKSPACE, save_path
+import workspace
 
 
 def list_files(directory: str = ".") -> list[str]:
-    workspace_root = Path(WORKSPACE)
-    path = workspace_root / save_path(directory)
+    workspace_root = Path(workspace.WORKSPACE)
+    path = workspace_root / workspace.resolve_path(directory)
 
     if not path.exists():
         return [f"Directory does not exist: {directory}"]
@@ -20,8 +20,10 @@ def list_files(directory: str = ".") -> list[str]:
         if is_path_ignored(item, ignored_patterns, base_dir=workspace_root):
             continue
 
+        # Относительный путь от корня рабочей области
+        rel_path = str(item.relative_to(workspace_root))
         suffix = "/" if item.is_dir() else ""
-        items.append(f"{item.name}{suffix}")
+        items.append(f"{rel_path}{suffix}")
 
     return items
 

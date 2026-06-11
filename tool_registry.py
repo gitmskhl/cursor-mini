@@ -28,3 +28,8 @@ FUNCTIONS = {
     "write_chunk": write_chunk.write_chunk,
     "write_file": write_file.write_file
 }
+
+DANGEROUS_TOOLS = {
+    "execute_bash",
+    "execute_python"
+}
