@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess
 import sys
-
+from .utils import truncate_output
 import workspace
 
 
@@ -36,14 +36,14 @@ def execute_python(path: str, timeout: int = 5, args: list[str] | None = None) -
         return {
             "success": result.returncode == 0,
             "returncode": result.returncode,
-            "stdout": result.stdout,
-            "stderr": result.stderr,
+            "stdout": truncate_output(str(result.stdout)),
+            "stderr": truncate_output(str(result.stderr)),
         }
     except subprocess.TimeoutExpired as error:
         return {
             "success": False,
             "returncode": -1,
-            "stdout": error.stdout or "",
+            "stdout": truncate_output(str(error.stdout)) or "",
             "stderr": f"Python execution timed out after {timeout} seconds",
         }
     except Exception as error:
@@ -51,7 +51,7 @@ def execute_python(path: str, timeout: int = 5, args: list[str] | None = None) -
             "success": False,
             "returncode": -1,
             "stdout": "",
-            "stderr": f"Error executing Python file: {error}",
+            "stderr": f"Error executing Python file: {truncate_output(str(error))}",
         }
 
 

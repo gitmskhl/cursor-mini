@@ -93,7 +93,7 @@ while not error:
                 if tool_name in FUNCTIONS:
                     if tool_name in DANGEROUS_TOOLS:
                         ans = input(f"Allow {tool_name}({tool_args})? [Y/N]: ")
-                        if ans.lower() in ("y", "yes", ""):
+                        if ans.lower() in ("y", "yes"):
                             ok = True
                         else:
                             ok = False

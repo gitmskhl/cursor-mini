@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess
-
+from .utils import truncate_output
 import workspace
 
 
@@ -35,14 +35,14 @@ def execute_bash(path: str, timeout: int = 5) -> dict:
         return {
             "success": result.returncode == 0,
             "returncode": result.returncode,
-            "stdout": result.stdout,
-            "stderr": result.stderr,
+            "stdout": truncate_output(str(result.stdout)),
+            "stderr": truncate_output(str(result.stderr)),
         }
     except subprocess.TimeoutExpired as error:
         return {
             "success": False,
             "returncode": -1,
-            "stdout": error.stdout or "",
+            "stdout": truncate_output(str(error.stdout)) or "",
             "stderr": f"Bash execution timed out after {timeout} seconds",
         }
     except Exception as error:
@@ -50,7 +50,7 @@ def execute_bash(path: str, timeout: int = 5) -> dict:
             "success": False,
             "returncode": -1,
             "stdout": "",
-            "stderr": f"Error executing Bash file: {error}",
+            "stderr": f"Error executing Bash file: {truncate_output(str(error))}",
         }
 
 
